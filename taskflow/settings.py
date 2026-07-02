@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'taskflow.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'taskflow_db',
+        'USER': 'taskflow_user',
+        'PASSWORD': 'Taskflow@123',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
