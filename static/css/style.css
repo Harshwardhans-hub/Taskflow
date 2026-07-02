@@ -1,0 +1,31 @@
+/* TaskFlow Custom Styles */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #ffd700 !important;
+}
+
+.btn-dark {
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 500;
+    transition: transform 0.2s ease;
+}
+
+.btn-dark:hover {
+    transform: translateY(-2px);
+}
