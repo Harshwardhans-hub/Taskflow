@@ -23,7 +23,7 @@
                     {% for task in tasks %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ task.title }}</td>
+                        <td><a href="{% url 'task-detail' task.id %}">{{ task.title }}</a></td>
                         <td>
                             {% if task.priority == 'high' %}
                                 <span class="badge bg-danger">High</span>
@@ -53,4 +53,4 @@
         {% endif %}
     </div>
 </div>
-{% endblock %}
+{% endblock %}  
