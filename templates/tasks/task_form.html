@@ -3,7 +3,7 @@
 {%block content%}
 <div class="row mt-4">
     <div class="col-md-6 offset-md-3">
-        <h2>Create New Task</h2>
+        <h2>{% if task %}Edit Task{% else %}Create New Task{% endif %}</h2>
         <form method="POST">
             {% csrf_token %}
             <div class="mb-3">
