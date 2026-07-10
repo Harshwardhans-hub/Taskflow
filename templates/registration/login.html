@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - TaskFlow{% endblock %}
+
+{% block content %}
+
+<div class="row mt-5">
+    <div class="col-md-4 offset-md-4">
+
+        <div class="card">
+            <div class="card-header bg-dark text-white text-center">
+                <h4 class="mb-0">Login to TaskFlow</h4>
+            </div>
+            <div class="card-body">
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Invalid username or password.
+                    </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-dark w-100">Login</button>
+                </form>
+
+                <hr>
+                <p class="text-center mb-0">Don't have an account? 
+                    <a href="{% url 'register' %}">Register</a>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
