@@ -18,7 +18,7 @@ def about(request):
 
 @login_required
 def task_list(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.filter(user=request.user)
     context = {
     'tasks' : tasks
     }
@@ -37,8 +37,10 @@ def task_create(request):
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('task-list')
+            task = form.save(commit=False)
+            task.user = request.user
+            task.save()
+            return redirect("task-list")
     else:
         form = TaskForm()
 
@@ -49,7 +51,7 @@ def task_create(request):
 
 @login_required
 def task_update(request,pk):
-    task = get_object_or_404(Task,pk=pk)
+    task = get_object_or_404(Task,pk=pk,user=request.user)
     if request.method=="POST":
         form = TaskForm(request.POST,instance=task)
         if form.is_valid():
@@ -66,7 +68,7 @@ def task_update(request,pk):
 
 @login_required
 def task_delete(request,pk):
-    task = get_object_or_404(Task,pk=pk)
+    task = get_object_or_404(Task,pk=pk,user=request.user)
     if request.method == "POST":
         task.delete()
         return redirect('task-list')
