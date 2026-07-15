@@ -1,18 +1,15 @@
-{%extends 'base.html' %}
-{%block title%}Home{%endblock%}
+{% extends 'base.html' %}
 
-{%block content %}
+{% block title %}Home - TaskFlow{% endblock %}
 
-<div class="row mt-5">
+{% block content %}
+
+<div class="row mt-4">
     <div class="col-md-8 offset-md-2 text-center">
-        <h1 class="display-4 fw-bold">Welcome, {{ username }}! </h1>
-        <p class="lead text-muted mt-3">
-            Manage your tasks efficiently. Stay organized, stay productive.
-        </p>
-        <p class="fs-5">You have <strong>{{ total_tasks }}</strong> tasks waiting.</p>
-        <a href="#" class="btn btn-dark btn-lg mt-3">View Tasks</a>
+        <h1>Welcome, {{ username }}!</h1>
+        <p class="lead">You have <strong>{{ total_tasks }}</strong> tasks in your list.</p>
+        <a href="{% url 'task-list' %}" class="btn btn-dark btn-lg">View Tasks</a>
     </div>
 </div>
 
-
-{%endblock %}
+{% endblock %}

@@ -1,56 +1,59 @@
 {% extends 'base.html' %}
-{% block title %}Tasks{% endblock %}
+
+{% block title %}Tasks - TaskFlow{% endblock %}
+
 {% block content %}
+
 <div class="row mt-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold">📋 All Tasks <span class="badge bg-dark">{{ tasks.count }}</span></h2>
-            <a href="#" class="btn btn-dark">+ New Task</a>
-        </div>
-        {% if tasks %}
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for task in tasks %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td><a href="{% url 'task-detail' task.id %}">{{ task.title }}</a></td>
-                        <td>
-                            {% if task.priority == 'high' %}
-                                <span class="badge bg-danger">High</span>
-                            {% elif task.priority == 'medium' %}
-                                <span class="badge bg-warning text-dark">Medium</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Low</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if task.status == 'done' %}
-                                <span class="badge bg-success">Done</span>
-                            {% elif task.status == 'in_progress' %}
-                                <span class="badge bg-info text-dark">In Progress</span>
-                            {% else %}
-                                <span class="badge bg-secondary">To Do</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ task.created_at|date:"M d, Y" }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <div class="alert alert-info">No tasks yet. Create your first task!</div>
-        {% endif %}
+    <div class="col-md-10 offset-md-1">
+       <div class="d-flex justify-content-between align-items-center">
+    <h2>All Tasks</h2>
+    <a href="{% url 'task-create' %}" class="btn btn-dark">+ New Task</a>
+</div>
+
+        <table class="table table-striped table-hover mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'task-detail' task.id %}">{{ task.title }}</a></td>
+                    <td>
+                        {% if task.status == 'done' %}
+                            <span class="badge bg-success">Done</span>
+                        {% elif task.status == 'in_progress' %}
+                            <span class="badge bg-warning text-dark">In Progress</span>
+                        {% else %}
+                            <span class="badge bg-secondary">To Do</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.priority == 'high' %}
+                            <span class="badge bg-danger">High</span>
+                        {% elif task.priority == 'medium' %}
+                            <span class="badge bg-warning text-dark">Medium</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Low</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ task.due_date|date:"M d, Y"|default:"Not set" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No tasks yet!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
-{% endblock %}  
+
+{% endblock %}
