@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib import messages
 
 
 def home(request):
@@ -18,6 +19,7 @@ def home(request):
         context['todo_count'] = user_tasks.filter(status='todo').count()
         context['inprogress_count'] = user_tasks.filter(status = 'in_progress').count()
         context['done_count'] = user_tasks.filter(status = 'done').count()
+
 
     return render(request,'home.html',context)
 
@@ -44,11 +46,6 @@ def task_list(request):
 
     return render(request, 'tasks/task_list.html', context)
 
-
-
-
-
-
 @login_required
 def task_detail(request,pk):#pk is the primary key and can also be seen as the task_id for viewing the detail about that particular task with the plk or task_id
     task = get_object_or_404(Task, pk=pk)
@@ -65,6 +62,7 @@ def task_create(request):
             task = form.save(commit=False)
             task.user = request.user
             task.save()
+            messages.success(request,"Task created successfully")
             return redirect("task-list")
     else:
         form = TaskForm()
@@ -72,6 +70,8 @@ def task_create(request):
     context = {
         'form': form,
     }
+
+    
     return render(request, 'tasks/task_form.html', context)
 
 @login_required
@@ -81,6 +81,7 @@ def task_update(request,pk):
         form = TaskForm(request.POST,instance=task)
         if form.is_valid():
             form.save()
+            messages.success(request,"Task edited successfully!")
             return redirect('task-list')
 
     else:
@@ -89,6 +90,7 @@ def task_update(request,pk):
 
     context = {'task':task,
             'form':form}
+
     return render(request,'tasks/task_form.html',context)        
 
 @login_required
@@ -96,6 +98,7 @@ def task_delete(request,pk):
     task = get_object_or_404(Task,pk=pk,user=request.user)
     if request.method == "POST":
         task.delete()
+        messages.success(request,"Task deleted successfully!")
         return redirect('task-list')
 
     context={
