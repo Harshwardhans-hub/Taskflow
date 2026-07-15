@@ -11,6 +11,24 @@
     <a href="{% url 'task-create' %}" class="btn btn-dark">+ New Task</a>
 </div>
 
+        <form method="GET" class="row g-2 mt-2 mb-3">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control"
+                       placeholder="Search tasks..." value="{{ search }}">
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-control">
+                    <option value="">All Statuses</option>
+                    <option value="todo" {% if status_filter == 'todo' %}selected{% endif %}>To Do</option>
+                    <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>In Progress</option>
+                    <option value="done" {% if status_filter == 'done' %}selected{% endif %}>Done</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-dark w-100">Search</button>
+            </div>
+        </form>
+
         <table class="table table-striped table-hover mt-3">
             <thead class="table-dark">
                 <tr>

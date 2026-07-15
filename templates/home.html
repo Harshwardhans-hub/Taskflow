@@ -6,10 +6,48 @@
 
 <div class="row mt-4">
     <div class="col-md-8 offset-md-2 text-center">
-        <h1>Welcome, {{ username }}!</h1>
-        <p class="lead">You have <strong>{{ total_tasks }}</strong> tasks in your list.</p>
+        <h1>Welcome, {{ user.username|default:username }}!</h1>
+        <p class="lead">Your personal task management dashboard.</p>
         <a href="{% url 'task-list' %}" class="btn btn-dark btn-lg">View Tasks</a>
+        <a href="{% url 'task-create' %}" class="btn btn-outline-dark btn-lg ms-2">+ New Task</a>
     </div>
 </div>
+
+{% if user.is_authenticated %}
+<div class="row mt-5">
+    <div class="col-md-3 offset-md-2">
+        <div class="card text-center border-secondary">
+            <div class="card-body">
+                <h3 class="text-dark">{{ my_tasks }}</h3>
+                <p class="mb-0">Total Tasks</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center border-secondary">
+            <div class="card-body">
+                <h3 class="text-secondary">{{ todo_count }}</h3>
+                <p class="mb-0">To Do</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center border-warning">
+            <div class="card-body">
+                <h3 class="text-warning">{{ inprogress_count }}</h3>
+                <p class="mb-0">In Progress</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center border-success">
+            <div class="card-body">
+                <h3 class="text-success">{{ done_count }}</h3>
+                <p class="mb-0">Done</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}

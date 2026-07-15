@@ -4,12 +4,20 @@ from .forms import TaskForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 def home(request):
     context = {'username': "Harshwardhan",
     'total_tasks' : Task.objects.count()
     }
+
+    if request.user.is_authenticated:
+        user_tasks = Task.objects.filter(user = request.user)
+        context['my_tasks'] = user_tasks.count()
+        context['todo_count'] = user_tasks.filter(status='todo').count()
+        context['inprogress_count'] = user_tasks.filter(status = 'in_progress').count()
+        context['done_count'] = user_tasks.filter(status = 'done').count()
 
     return render(request,'home.html',context)
 
@@ -19,10 +27,27 @@ def about(request):
 @login_required
 def task_list(request):
     tasks = Task.objects.filter(user=request.user)
+
+    search = request.GET.get('search', '')
+    if search:
+        tasks = tasks.filter(Q(title__icontains=search) | Q(description__icontains=search))
+
+    status_filter = request.GET.get('status', '')
+    if status_filter:
+        tasks = tasks.filter(status=status_filter)
+
     context = {
-    'tasks' : tasks
+        'tasks': tasks,
+        'search': search,
+        'status_filter': status_filter,
     }
-    return render(request, 'tasks/task_list.html',context)
+
+    return render(request, 'tasks/task_list.html', context)
+
+
+
+
+
 
 @login_required
 def task_detail(request,pk):#pk is the primary key and can also be seen as the task_id for viewing the detail about that particular task with the plk or task_id
