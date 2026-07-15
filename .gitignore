@@ -1,6 +1,10 @@
 # Virtual Environment
 venv/
 
+# Render
+render_service.json
+staticfiles/
+
 # Python cache
 __pycache__/
 *.pyc

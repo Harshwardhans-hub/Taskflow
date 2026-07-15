@@ -4,47 +4,87 @@
 
 {% block content %}
 
-<div class="row mt-4">
+{% if user.is_authenticated %}
+<!-- Hero for logged-in users -->
+<div class="row mt-4 mb-4">
     <div class="col-md-8 offset-md-2 text-center">
-        <h1>Welcome, {{ user.username|default:username }}!</h1>
-        <p class="lead">Your personal task management dashboard.</p>
-        <a href="{% url 'task-list' %}" class="btn btn-dark btn-lg">View Tasks</a>
-        <a href="{% url 'task-create' %}" class="btn btn-outline-dark btn-lg ms-2">+ New Task</a>
+        <h1 class="display-5 fw-bold">Welcome back, <span class="text-primary">{{ user.username }}</span>! 👋</h1>
+        <p class="lead text-muted">Here's a snapshot of your tasks today.</p>
+        <a href="{% url 'task-list' %}" class="btn btn-dark btn-lg me-2">View Tasks</a>
+        <a href="{% url 'task-create' %}" class="btn btn-outline-dark btn-lg">+ New Task</a>
     </div>
 </div>
 
-{% if user.is_authenticated %}
+<!-- Stats Row -->
+<div class="row justify-content-center g-4 mb-5">
+    <div class="col-md-2">
+        <div class="card text-center shadow-sm border-0 bg-dark text-white h-100">
+            <div class="card-body py-4">
+                <h2 class="fw-bold mb-1">{{ my_tasks }}</h2>
+                <p class="mb-0 text-white-50">Total</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center shadow-sm border-0 h-100" style="background:#f8f9fa;">
+            <div class="card-body py-4">
+                <h2 class="fw-bold mb-1 text-secondary">{{ todo_count }}</h2>
+                <p class="mb-0 text-muted">To Do</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center shadow-sm border-0 h-100" style="background:#fff8e1;">
+            <div class="card-body py-4">
+                <h2 class="fw-bold mb-1 text-warning">{{ inprogress_count }}</h2>
+                <p class="mb-0 text-muted">In Progress</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center shadow-sm border-0 h-100" style="background:#e8f5e9;">
+            <div class="card-body py-4">
+                <h2 class="fw-bold mb-1 text-success">{{ done_count }}</h2>
+                <p class="mb-0 text-muted">Done</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- Hero for guests -->
 <div class="row mt-5">
-    <div class="col-md-3 offset-md-2">
-        <div class="card text-center border-secondary">
-            <div class="card-body">
-                <h3 class="text-dark">{{ my_tasks }}</h3>
-                <p class="mb-0">Total Tasks</p>
-            </div>
+    <div class="col-md-8 offset-md-2 text-center">
+        <h1 class="display-4 fw-bold">Organize your work with <span class="text-dark">TaskFlow</span></h1>
+        <p class="lead text-muted mt-3">A simple, powerful task manager. Track what matters, stay on top of deadlines, and get things done.</p>
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-dark btn-lg me-3">Get Started — It's Free</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-dark btn-lg">Login</a>
         </div>
     </div>
-    <div class="col-md-2">
-        <div class="card text-center border-secondary">
-            <div class="card-body">
-                <h3 class="text-secondary">{{ todo_count }}</h3>
-                <p class="mb-0">To Do</p>
-            </div>
+</div>
+
+<!-- Feature highlights -->
+<div class="row mt-5 g-4 justify-content-center">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm text-center p-4 h-100">
+            <div class="fs-1 mb-3">✅</div>
+            <h5 class="fw-bold">Full CRUD</h5>
+            <p class="text-muted small">Create, edit, and delete tasks with a clean and simple interface.</p>
         </div>
     </div>
-    <div class="col-md-2">
-        <div class="card text-center border-warning">
-            <div class="card-body">
-                <h3 class="text-warning">{{ inprogress_count }}</h3>
-                <p class="mb-0">In Progress</p>
-            </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm text-center p-4 h-100">
+            <div class="fs-1 mb-3">🔒</div>
+            <h5 class="fw-bold">Private & Secure</h5>
+            <p class="text-muted small">Your tasks are yours alone. Login-protected and user-scoped data.</p>
         </div>
     </div>
-    <div class="col-md-2">
-        <div class="card text-center border-success">
-            <div class="card-body">
-                <h3 class="text-success">{{ done_count }}</h3>
-                <p class="mb-0">Done</p>
-            </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm text-center p-4 h-100">
+            <div class="fs-1 mb-3">🔍</div>
+            <h5 class="fw-bold">Search & Filter</h5>
+            <p class="text-muted small">Find any task instantly with live search and status filters.</p>
         </div>
     </div>
 </div>
