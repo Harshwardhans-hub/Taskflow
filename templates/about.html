@@ -4,11 +4,52 @@
 
 {% block content %}
 
-<div class="row mt-4">
-    <div class="col-md-8 offset-md-2">
-        <h1>About TaskFlow</h1>
-        <p>TaskFlow is a team task management web application.</p>
+<div class="row mt-5">
+    <div class="col-md-8 offset-md-2 text-center">
+        <h1 class="display-5 fw-bold">About TaskFlow</h1>
+        <p class="lead text-muted mt-3">TaskFlow is a task management web application.</p>
+    </div>
+</div>
 
+<div class="row mt-5 g-4 justify-content-center">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <h5 class="fw-bold">🛠️ Built With</h5>
+            <ul class="text-muted mt-2 ps-3">
+                <li>Django 6.0</li>
+                <li>Django REST Framework</li>
+                <li>Bootstrap 5</li>
+                <li>MySQL</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <h5 class="fw-bold">✨ Features</h5>
+            <ul class="text-muted mt-2 ps-3">
+                <li>User Authentication</li>
+                <li>Task CRUD</li>
+                <li>Search & Filter</li>
+                <li>Pagination</li>
+                <li>REST API</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm p-4 h-100">
+            <h5 class="fw-bold">🚀 Deployed On</h5>
+            <ul class="text-muted mt-2 ps-3">
+                <li>Render (Web Service)</li>
+                <li>Render PostgreSQL</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6 offset-md-3 text-center">
+        <a href="{% url 'register' %}" class="btn btn-dark btn-lg me-2">Get Started</a>
+        <a href="{% url 'task-list' %}" class="btn btn-outline-dark btn-lg">View Tasks</a>
     </div>
 </div>
 
