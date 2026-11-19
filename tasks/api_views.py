@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from datetime import date
 from .models import Task
 from .serializers import TaskSerializer
 
@@ -30,6 +31,35 @@ class TaskListAPI(APIView):
 			if priority_filter not in valid_priorities:
 				return Response({"detail": "Invalid priority filter."}, status=status.HTTP_400_BAD_REQUEST)
 			tasks = tasks.filter(priority=priority_filter)
+
+		due_after = request.query_params.get("due_after", "")
+		due_before = request.query_params.get("due_before", "")
+		for parameter, raw_value, lookup in (
+			("due_after", due_after, "gte"),
+			("due_before", due_before, "lte"),
+		):
+			if raw_value:
+				try:
+					parsed_date = date.fromisoformat(raw_value)
+				except ValueError:
+					return Response(
+						{"detail": f"Invalid {parameter}; use YYYY-MM-DD."},
+						status=status.HTTP_400_BAD_REQUEST,
+					)
+				if lookup == "gte":
+					tasks = tasks.filter(due_date__gte=parsed_date)
+				else:
+					tasks = tasks.filter(due_date__lte=parsed_date)
+
+		ordering = request.query_params.get("ordering", "")
+		allowed_orderings = {
+			"title", "-title", "due_date", "-due_date",
+			"created_at", "-created_at", "priority", "-priority",
+		}
+		if ordering:
+			if ordering not in allowed_orderings:
+				return Response({"detail": "Invalid ordering field."}, status=status.HTTP_400_BAD_REQUEST)
+			tasks = tasks.order_by(ordering)
 
 		serializer = TaskSerializer(tasks, many=True)
 		return Response(serializer.data)
