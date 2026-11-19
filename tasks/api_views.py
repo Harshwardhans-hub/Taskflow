@@ -10,11 +10,29 @@ from .serializers import TaskSerializer
 class TaskListAPI(APIView):
 	permission_classes = [IsAuthenticated]
 
-	def get(self,request):
+	def get(self, request):
 		tasks = Task.objects.filter(user=request.user)
-		serializer = TaskSerializer(tasks,many=True)
+		search = request.query_params.get("search", "").strip()
+		status_filter = request.query_params.get("status", "")
+		priority_filter = request.query_params.get("priority", "")
+
+		if search:
+			tasks = tasks.filter(Q(title__icontains=search) | Q(description__icontains=search))
+
+		if status_filter:
+			valid_statuses = {choice[0] for choice in Task.STATUS_CHOICES}
+			if status_filter not in valid_statuses:
+				return Response({"detail": "Invalid status filter."}, status=status.HTTP_400_BAD_REQUEST)
+			tasks = tasks.filter(status=status_filter)
+
+		if priority_filter:
+			valid_priorities = {choice[0] for choice in Task.PRIORITY_CHOICES}
+			if priority_filter not in valid_priorities:
+				return Response({"detail": "Invalid priority filter."}, status=status.HTTP_400_BAD_REQUEST)
+			tasks = tasks.filter(priority=priority_filter)
+
+		serializer = TaskSerializer(tasks, many=True)
 		return Response(serializer.data)
-		  
 
 	def post(self,request):
 		serializer = TaskSerializer(data = request.data)
