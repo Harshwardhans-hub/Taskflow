@@ -57,3 +57,18 @@ class TaskApiOwnershipTests(APITestCase):
         response = self.client.get(reverse("task-list-api"))
 
         self.assertIn(response.status_code, (401, 403))
+
+    def test_api_create_ignores_client_supplied_owner_identity(self):
+        response = self.client.post(
+            reverse("task-list-api"),
+            {
+                "title": "Ownership must be server assigned",
+                "description": "Client ownership fields must not be trusted",
+                "user": self.other_user.pk,
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        created = Task.objects.get(title="Ownership must be server assigned")
+        self.assertEqual(created.user, self.owner)
