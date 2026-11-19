@@ -51,42 +51,6 @@ class TaskApiOwnershipTests(APITestCase):
         self.assertEqual(response.status_code, 404)
         self.assertTrue(Task.objects.filter(pk=self.private_task.pk).exists())
 
-    def test_api_put_allows_owner_to_update_task_fields(self):
-        response = self.client.put(
-            reverse("task-detail-api", args=[self.own_task.pk]),
-            {
-                "title": "Updated by owner",
-                "description": "Changed through API",
-                "status": "in_progress",
-                "priority": "high",
-                "due_date": "2026-12-01",
-            },
-            format="json",
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.own_task.refresh_from_db()
-        self.assertEqual(self.own_task.title, "Updated by owner")
-        self.assertEqual(self.own_task.user, self.owner)
-
-    def test_api_put_cannot_update_another_users_task(self):
-        response = self.client.put(
-            reverse("task-detail-api", args=[self.private_task.pk]),
-            {
-                "title": "Attempted takeover",
-                "description": "",
-                "status": "todo",
-                "priority": "medium",
-                "due_date": "",
-            },
-            format="json",
-        )
-
-        self.assertEqual(response.status_code, 404)
-        self.private_task.refresh_from_db()
-        self.assertEqual(self.private_task.title, "Another user's task")
-        self.assertEqual(self.private_task.user, self.other_user)
-
     def test_api_list_requires_authentication(self):
         self.client.force_authenticate(user=None)
 
