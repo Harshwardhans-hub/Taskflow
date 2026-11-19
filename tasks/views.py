@@ -53,7 +53,7 @@ def task_list(request):
 
 @login_required
 def task_detail(request,pk):#pk is the primary key and can also be seen as the task_id for viewing the detail about that particular task with the plk or task_id
-    task = get_object_or_404(Task, pk=pk)
+    task = get_object_or_404(Task, pk=pk, user=request.user)
     context={
     'task' : task,}
 
